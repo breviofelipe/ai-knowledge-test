@@ -1,4 +1,3 @@
-import { generateText } from "ai"
 import type { Question } from "../mongodb/models"
 
 import { sendMessageToDeepSeek } from "./deepseek";
@@ -35,19 +34,6 @@ Responda em ${languege}.`
 
   try {
     const { message } = await sendMessageToDeepSeek(prompt);
-    //  generateText({
-    //   model: "openai/gpt-4-mini",
-    //   prompt,
-    //   temperature: 0.7,
-    // })
-
-    // console.log("text",message);
-    // const jsonMatch = text.match(/\[[\s\S]*\]/)
-    // if (!jsonMatch) {
-    //   console.error("[v0] Failed to extract JSON from AI response:", text)
-    //   throw new Error("Invalid response format from AI")
-    // }
-
     const parsedQuestions = JSON.parse(message.content)
 
     return parsedQuestions.map((q: any) => ({
