@@ -1,0 +1,7 @@
+.env
+./scripts/*
+.vscode/*
+node_modules/
+dist/
+lib/ai/__tests__/*
+.next/
