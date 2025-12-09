@@ -10,27 +10,20 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Topic is required" }, { status: 400 })
     }
 
-    // Try to get existing questions first
-    let questions = await getQuestionsByTopic(topic, numberOfQuestions)
+    // Always generate new questions
+    const generatedQuestions = await generateQuizQuestions({
+      topic,
+      difficulty: difficulty || "medium",
+      numberOfQuestions,
+    })
 
-    // If not enough questions exist, generate new ones
-    if (questions.length < numberOfQuestions) {
-      const neededQuestions = numberOfQuestions - questions.length
-      const generatedQuestions = await generateQuizQuestions({
-        topic,
-        difficulty: difficulty || "medium",
-        numberOfQuestions: neededQuestions,
-      })
-
-      // Save generated questions to MongoDB
-      if (generatedQuestions.length > 0) {
-        await bulkSaveQuestions(generatedQuestions)
-        questions = [...questions, ...generatedQuestions]
-      }
+    // Save generated questions to MongoDB
+    if (generatedQuestions.length > 0) {
+      await bulkSaveQuestions(generatedQuestions)
     }
 
     // Format questions for client
-    const formattedQuestions = questions.slice(0, numberOfQuestions).map((q, index) => ({
+    const formattedQuestions = generatedQuestions.map((q, index) => ({
       id: `${index}`,
       question: q.question,
       options: q.options,
