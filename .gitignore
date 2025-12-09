@@ -1,5 +1,5 @@
 .env
-./scripts/*
+scripts/*
 .vscode/*
 node_modules/
 dist/
