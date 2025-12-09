@@ -45,7 +45,7 @@ export default function QuizClient({
         const response = await fetch("/api/generate-quiz", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ topic, difficulty, numberOfQuestions: 10 }),
+          body: JSON.stringify({ topic, difficulty, numberOfQuestions: 5 }),
         })
 
         if (!response.ok) {
